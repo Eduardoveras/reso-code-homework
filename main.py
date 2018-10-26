@@ -4,19 +4,13 @@ import pprint
 from kivy.factory import Factory as F
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
-from kivy.config import Config
 import webbrowser
-
-
-def callback(link):
-    webbrowser.open(link)
 
 
 def generate_data_model(pages):
     menu = {}
     for page in pages:
         for record in page:
-            # pp.pprint(record["fields"])
             if "Live" in record["fields"] and record["fields"]["Live"] is True:
                 if record["fields"]["Main Menu"] in menu:
 
@@ -62,13 +56,13 @@ def generate_GUI(menus):
             for menu_option in items:
                 if "Name" in menu_option:
                     btn = Button(text=menu_option["Name"], size_hint_y=None, height=44)
-                    btn.bind(on_press=lambda x: callback(link=menu_option["URL"]))
+                    btn.bind(on_press=lambda x: webbrowser.open(menu_option["URL"]))
                 else:
-                    btn = Button(text="NO TITLE FOUND", size_hint_y=None, height=44)
-                    btn.bind(on_press=lambda x: callback(link=menu_option["URL"]))
+                    btn = Button(text="<EMPTY>", size_hint_y=None, height=44)
+                    btn.bind(on_press=lambda x: webbrowser.open(menu_option["URL"]))
 
                 dropdown.add_widget(btn)
-
+            dropdown.add_widget(Button(text="___________________________", size_hint_y=None, height=44))
             sub_menu_menu.bind(on_release=dropdown.open)
 
             ag.add_widget(sub_menu_menu)
