@@ -1,12 +1,14 @@
 from kivy.app import App
 from airtable import Airtable
 import pprint
+
 from kivy.factory import Factory as F
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.dropdown import DropDown
 from kivy.uix.button import Button
 import webbrowser
 
+from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
@@ -87,7 +89,7 @@ def generate_GUI(menus):
 
 def generate_layout(layout, menus, should_generate_menu):
     layout.clear_widgets()
-    btn1 = Button(text='Generate Resonance Menu', size_hint=(1, 0.1))
+    btn1 = Button(text='Generate Resonance Menu', size_hint=(1, 1))
     if should_generate_menu:
         inner_layout = generate_GUI(menus)
     else:
@@ -95,7 +97,12 @@ def generate_layout(layout, menus, should_generate_menu):
     # Recursive call
     btn1.bind(on_press=lambda x: generate_layout(layout, menus, True))
 
-    layout.add_widget(btn1)
+    title_layout = BoxLayout(orientation='horizontal', size_hint=(1, 0.15))
+    title_layout.add_widget(Image(source='logo.jpg', size_hint=(0.15, 1)))
+    title_layout.add_widget(btn1)
+
+    layout.add_widget(title_layout)
+    # layout.add_widget(Button(text='Generate Resonance Menu', size_hint=(1, 0.1)))
     layout.add_widget(inner_layout)
     return layout
 
@@ -125,17 +132,18 @@ def generate_GUI(menus):
 
         print(">>>" + menu_key)
         for sub_menu_key, items in sub_menu.items():
-            menu_grid.add_widget(Label(text=sub_menu_key, size_hint=(None, None),font_size=14, halign="left", valign="middle"))
+            menu_grid.add_widget(
+                Label(text=sub_menu_key, size_hint=(None, None), font_size=14, halign="left", valign="middle"))
             print("\t" + sub_menu_key)
             for option in items:
 
                 if "Name" in option:
                     print("\t\t" + option["Name"])
-                    btn = Button(text=option["Name"], size_hint=(0.1, None),background_color=(0.2,1,1,0.8))
+                    btn = Button(text=option["Name"], size_hint=(0.1, None), background_color=(0.2, 1, 1, 0.8))
                     btn.bind(on_press=lambda x: webbrowser.open(option["URL"]))
                 else:
                     print("\t\t" + "<EMPTY>")
-                    btn = Button(text="<EMPTY>", size_hint=(0.1, None))
+                    btn = Button(text="<EMPTY>", size_hint=(0.1, None), background_color=(0.2, 1, 1, 0.8))
                     btn.bind(on_press=lambda x: webbrowser.open(option["URL"]))
                 btn.width = 250
                 btn.height = 50
@@ -149,7 +157,6 @@ def generate_GUI(menus):
 
         # Adding headers to main layout
         app_gui.add_widget(main_menu)
-    app_gui.add_widget(TabbedPanelHeader(background_normal=('logo.jpg')), -0)
     return app_gui
 
 
