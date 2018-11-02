@@ -1,19 +1,22 @@
-from kivy.app import App
-from airtable import Airtable
 import pprint
-
-from kivy.factory import Factory as F
-from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.dropdown import DropDown
-from kivy.uix.button import Button
 import webbrowser
-
+from airtable import Airtable
+from kivy.app import App
+from kivy.lang import Builder
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.label import Label
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.tabbedpanel import TabbedPanel, TabbedPanelHeader
 from kivy.config import Config
+
+kv = '''
+<Label>:
+    font_size: dp(16)
+'''
+Builder.load_string(kv)
 
 
 def generate_data_model(pages):
@@ -133,7 +136,8 @@ def generate_GUI(menus):
         print(">>>" + menu_key)
         for sub_menu_key, items in sub_menu.items():
             menu_grid.add_widget(
-                Label(text=sub_menu_key, size_hint=(None, None), font_size=14, halign="left", valign="middle"))
+                Label(text="     " + sub_menu_key, size_hint=(None, None), font_size=14, halign="left",
+                      valign="middle"))
             print("\t" + sub_menu_key)
             for option in items:
 
